@@ -1,7 +1,7 @@
 # Démo « Rapprochement RH / ERP » depuis Bob
 
 Bob compare deux listes d'utilisateurs (RH et ERP), montre les écarts, puis passe
-le contrôle OpenPages en **Ineffective** avec l'explication, via le serveur MCP de Thomas.
+le contrôle OpenPages en **Ineffective** avec l'explication, via le serveur MCP OpenPages.
 
 ## Contenu
 ```
@@ -30,10 +30,10 @@ Conclusion : **Ineffective** (3 écarts bloquants).
 1. Copier ce dossier dans le workspace ouvert dans Bob.
 2. Vérifier : `python3 compare_users.py` → doit afficher le tableau et « Conclusion : Ineffective ».
 3. Dans Bob, utiliser un mode qui a **à la fois** l'exécution de commandes et le MCP
-   (mode *Code* / *Agent*). Le mode « OpenPages » du repo de Julien n'exécute pas de commande :
+   (mode *Code* / *Agent*). Un mode limité à « mcp / read / edit » n'exécute pas de commande :
    soit ajouter `- command` dans ses `groups` (fichier `.bob/custom_modes.yaml`),
    soit utiliser la variante sans script de `PROMPT_BOB.md`.
-4. Contrôle cible : **CTRL-AL-TEC002** (Resource ID 213037), déjà renseigné dans les prompts.
+4. Contrôle cible : **CTRL-IT-002** — renseigner son Resource ID (`<RESOURCE_ID>`) dans `PROMPT_BOB.md`.
 5. Faire une répétition complète, puis **remettre le contrôle à zéro** (prompt 2).
 
 ## Déroulé de la démo (≈ 5 min)

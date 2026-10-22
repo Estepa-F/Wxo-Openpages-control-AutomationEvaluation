@@ -1,6 +1,7 @@
 # Instructions pour Bob — Agent d'évaluation des contrôles OpenPages
 
 > **Bob : lis ce fichier en entier, puis exécute les étapes dans l'ordre.**
+> `<REPO>` désigne le dossier où ce repo est cloné (ex. `~/projets/wxo-openpages-control-automationevaluation`).
 > Après chaque étape, affiche un court résumé de ce que tu as fait et **attends ma validation**
 > avant de passer à la suivante. Ne saute aucune étape. Réponds en français.
 
@@ -8,7 +9,7 @@
 
 ## 1. Contexte
 
-- **Client** : démo Air Liquide (GRC / contrôle interne).
+- **Contexte** : démo GRC / contrôle interne (secteur industriel).
 - **Outil GRC** : IBM OpenPages. Les contrôles internes y sont des objets `SOXControl`.
   Chaque contrôle a une **Description** et un champ **Operating Effectiveness**
   (efficacité opérationnelle) qui vaut `Effective`, `Ineffective` ou `Not Determined`.
@@ -26,7 +27,7 @@
   `simulate_control_test` **simule** un résultat de test réaliste et **toujours identique**
   (démo reproductible). Il n'appelle aucun système externe.
 - **Déjà en place dans OpenPages (ne pas modifier)** : l'extension vers Orchestrate,
-  le Custom Machine Learning Model et le bouton sur la vue `Demo-Task-SOXControl-4`.
+  le Custom Machine Learning Model et le bouton sur la vue `Task View du contrôle (SOXControl)`.
   Ils appellent l'agent nommé **`Control_Evaluation_Agent`**. En redéployant un agent
   **sous ce même nom**, le bouton appellera automatiquement le nouvel agent.
 
@@ -34,11 +35,11 @@
 
 | Élément | Valeur |
 |---|---|
-| Contrôle de démo | `CTRL-AL-FIN002` (SOXControl) |
+| Contrôle de démo | `CTRL-FIN-002` (SOXControl) |
 | Champ statut | `OPSS-Ctl:Operating Effectiveness` (Effective / Ineffective / Not Determined) |
 | Champ explication | `OPSS-Ctl-Cert:OpEffExplain` |
 | Environnement Orchestrate (ADK) | `demo-controls` (déjà enregistré) |
-| Environnement Python avec l'ADK | `~/Desktop/control-evaluation/.venv` |
+| Environnement Python avec l'ADK | `<REPO>/.venv` (voir le README racine) |
 | Nom de l'agent (obligatoire) | `Control_Evaluation_Agent` |
 | Nom du tool (obligatoire) | `simulate_control_test` |
 | Modèle LLM | `groq/openai/gpt-oss-120b` |
@@ -47,14 +48,14 @@
 - **Ne jamais afficher, écrire dans un fichier ni committer une clé API.** Si une clé est
   demandée, arrête-toi et demande-moi de la saisir moi-même dans le terminal.
 - **Ne rien modifier dans OpenPages** pendant les étapes 1 à 5 : lecture seule via le MCP.
-- Ne modifie pas le dossier `~/Desktop/control-evaluation` (c'est la version de secours).
+- Travaille dans un dossier vide séparé ; ne modifie pas `<REPO>` (c'est la version de secours).
 
 ---
 
 ## 3. Étapes à réaliser
 
 ### Étape 1 — Lire le contrôle dans OpenPages (MCP, lecture seule)
-Via le serveur MCP OpenPages, retrouve le contrôle `CTRL-AL-FIN002` (SOXControl) et affiche :
+Via le serveur MCP OpenPages, retrouve le contrôle `CTRL-FIN-002` (SOXControl) et affiche :
 son Resource ID, sa description, et la valeur actuelle des champs
 `OPSS-Ctl:Operating Effectiveness` et `OPSS-Ctl-Cert:OpEffExplain`.
 Explique en 3 phrases ce que ce contrôle vérifie. **Garde la description exacte pour l'étape 5.**
@@ -129,7 +130,7 @@ Les **instructions** de l'agent doivent imposer :
 Exécute dans le terminal, **une commande à la fois**, et montre le résultat de chacune :
 
 ```bash
-source ~/Desktop/control-evaluation/.venv/bin/activate
+source <REPO>/.venv/bin/activate
 orchestrate env activate demo-controls
 orchestrate tools import -k python \
   -f tools/simulate_control_test/simulate_control_test.py \
@@ -143,7 +144,7 @@ orchestrate agents deploy --name Control_Evaluation_Agent
 - Les messages attendus : « updated successfully » / « Successfully deployed agent ».
 
 ### Étape 5 — Tester l'agent déployé
-1. Avec la **description exacte** de `CTRL-AL-FIN002` lue à l'étape 1 :
+1. Avec la **description exacte** de `CTRL-FIN-002` lue à l'étape 1 :
    ```bash
    orchestrate chat ask --agent-name Control_Evaluation_Agent "<description>"
    ```
@@ -161,21 +162,23 @@ Explique-moi en 5 lignes ce que je dois montrer :
 - Custom ML Model « Évaluer l'efficacité opérationnelle (IA) » : entrée = Description,
   sorties JSONata `$eval($replace(choices[0].message.content, "\\'", "'")).OperatingEffectiveness`
   et `.Explanation` → champs `Operating Effectiveness` et `Control Operating Effectively Explanation`.
-- Sur la fiche `CTRL-AL-FIN002` : clic sur « Évaluer l'efficacité opérationnelle (IA) » sous la Description,
+- Sur la fiche `CTRL-FIN-002` : clic sur « Évaluer l'efficacité opérationnelle (IA) » sous la Description,
   puis **Use suggestion**, puis **Save** → Operating Effectiveness = **Ineffective**.
 
 ### Étape 7 — Vérifier le résultat dans OpenPages (MCP, lecture seule)
-Quand je te le demande (après mon clic sur le bouton), relis `CTRL-AL-FIN002` via le MCP et confirme
+Quand je te le demande (après mon clic sur le bouton), relis `CTRL-FIN-002` via le MCP et confirme
 les valeurs enregistrées de `OPSS-Ctl:Operating Effectiveness` et `OPSS-Ctl-Cert:OpEffExplain`.
 
 ### Étape 8 — Plan d'action 2ᵉ ligne → 1ʳᵉ ligne (sur demande uniquement)
+> Version autonome de cette étape : `scenario-3-plan-action/PROMPT_BOB.md`.
+
 **Contexte métier** : la 1ʳᵉ ligne (L1, le propriétaire du contrôle) a auto-évalué le contrôle
 **Effective**. Le test de la 2ᵉ ligne (L2, contrôle interne) — l'agent IA — conclut **Ineffective**.
 Il y a **contradiction** : L2 ne corrige pas lui-même l'évaluation, il **demande à L1 de vérifier
 et de mettre à jour l'évaluation du contrôle**, via un **plan d'action** tracé dans OpenPages.
 
 **8a — Constater la contradiction (lecture seule)**
-1. Relis `CTRL-AL-FIN002` : nom, Resource ID, propriétaire (`OPSS-Ctl:Control Owner`),
+1. Relis `CTRL-FIN-002` : nom, Resource ID, propriétaire (`OPSS-Ctl:Control Owner`),
    valeur actuelle de `OPSS-Ctl:Operating Effectiveness` = **évaluation L1**.
 2. Obtiens l'évaluation L2 en appelant l'agent :
    `orchestrate chat ask --agent-name Control_Evaluation_Agent "<description exacte du contrôle>"`
@@ -193,10 +196,10 @@ et de mettre à jour l'évaluation du contrôle**, via un **plan d'action** trac
 Montre-moi d'abord le contenu exact que tu vas créer, puis, après mon « OK » :
 
 1. **Issue** (enfant du contrôle) avec `openpages_upsert_object`, `object_type = issue`,
-   `primaryParentId = <Resource ID de CTRL-AL-FIN002>` :
-   - **Nom** : `CTRL-AL-FIN002_ISS_01 – Contradiction évaluation L1 / test L2`
+   `primaryParentId = <Resource ID de CTRL-FIN-002>` :
+   - **Nom** : `CTRL-FIN-002_ISS_01 – Contradiction évaluation L1 / test L2`
    - **Description** (recopier telle quelle, sans la tronquer) :
-     « Le test de 2ᵉ ligne du 15/10/2026 conclut que le contrôle CTRL-AL-FIN002 est INEFFICACE,
+     « Le test de 2ᵉ ligne du <date du jour> conclut que le contrôle CTRL-FIN-002 est INEFFICACE,
      alors que l’auto-évaluation de 1ʳᵉ ligne le déclare efficace. Motif : paiement PAY-2026-11307
      (commande PO-4500172233) facturé 52 714,00 EUR pour 50 980,00 EUR commandés, soit +3,4 %
      au-delà de la tolérance de ±2 %, sans dérogation approuvée. La 1ʳᵉ ligne doit vérifier
@@ -209,7 +212,7 @@ Montre-moi d'abord le contenu exact que tu vas créer, puis, après mon « OK »
    - **ACT-01 – Analyser l’écart PAY-2026-11307** : vérifier le paiement, retrouver une éventuelle
      dérogation approuvée, sinon lancer la régularisation auprès du fournisseur. Échéance J+7.
    - **ACT-02 – Mettre à jour l’évaluation du contrôle** : après analyse, mettre à jour
-     « Operating Effectiveness » et « Control Operating Effectively Explanation » de CTRL-AL-FIN002
+     « Operating Effectiveness » et « Control Operating Effectively Explanation » de CTRL-FIN-002
      avec les justificatifs. Échéance J+15.
 3. Ne modifie **pas** le champ Operating Effectiveness du contrôle : c'est à L1 de le faire (ACT-02).
 4. Relis ce que tu as créé et donne-moi un tableau récapitulatif (Objet | Nom | Assignataire |
@@ -221,7 +224,7 @@ lue à l'étape 8b et réessaie ; en dernier recours, crée l'objet sans ce cham
 ---
 
 ## 4. Remise à zéro (après la répétition, sur demande uniquement)
-Avec `openpages_upsert_object` sur `CTRL-AL-FIN002` :
+Avec `openpages_upsert_object` sur `CTRL-FIN-002` :
 `OPSS-Ctl:Operating Effectiveness` = `Not Determined`, `OPSS-Ctl-Cert:OpEffExplain` = `""`.
 ⚠️ `openpages_upsert_object` **efface la Description si on ne la renvoie pas** : relis d'abord
 le nom et la description du contrôle et **recopie-les à l'identique** dans l'appel.
@@ -234,6 +237,6 @@ ou laisse-moi les supprimer à la main dans OpenPages.
 ## 5. Plan B (si l'agent construit ne répond pas correctement)
 Redéployer la version de secours, qui a passé 20 tests sur 20 :
 ```bash
-cd ~/Desktop/control-evaluation && source .venv/bin/activate && ./deploy.sh
+source <REPO>/.venv/bin/activate && cd <REPO>/scenario-1-bouton-ia && ./deploy.sh
 ```
 Le bouton OpenPages fonctionne alors immédiatement (même nom d'agent, même ID).

@@ -1,79 +1,76 @@
-# Control Evaluation Agent — démo Air Liquide
+# watsonx Orchestrate × IBM OpenPages — évaluation automatisée des contrôles
 
-Le service reçoit la **description d'un contrôle** OpenPages et renvoie un JSON plat :
+Démonstrateur GRC : un agent IA **watsonx Orchestrate** évalue l'**efficacité opérationnelle**
+(*Operating Effectiveness*) des contrôles internes **IBM OpenPages**, et **IBM Bob** pilote
+OpenPages via son serveur MCP pour analyser des données et ouvrir des plans d'action.
 
-```json
-{"OperatingEffectiveness": "Ineffective", "Explanation": "[Test simulé – période 01/09/2026 - 30/09/2026] ..."}
+> Les données, contrôles et résultats de test sont **fictifs** (démo reproductible).
+> Aucune donnée client, aucun identifiant d'instance ni aucune clé n'est versionné.
+
+## Les 3 scénarios
+
+| Scénario | Ce qu'il montre | Déclencheur | Dossier |
+|---|---|---|---|
+| **1. Bouton IA sur le contrôle** | Un clic sur la fiche OpenPages appelle l'agent Orchestrate, qui propose `Effective` / `Ineffective` / `Not Determined` + une explication | Bouton *AI Insights* dans OpenPages | [`scenario-1-bouton-ia/`](scenario-1-bouton-ia/) |
+| **2. Rapprochement RH / ERP** | Bob compare deux extractions (RH et comptes ERP), détecte les écarts et passe le contrôle à `Ineffective` | Prompt dans IBM Bob | [`scenario-2-rh-erp/`](scenario-2-rh-erp/) |
+| **3. Plan d'action 2ᵉ → 1ʳᵉ ligne** | Contradiction entre l'auto-évaluation et le test IA → Bob crée une Issue et deux actions assignées au propriétaire du contrôle | Prompt dans IBM Bob | [`scenario-3-plan-action/`](scenario-3-plan-action/) |
+
+## Architecture (scénario 1)
+
+```
+Fiche du contrôle (OpenPages)
+   │ clic « Évaluer l'efficacité opérationnelle (IA) »
+   ▼
+Custom Machine Learning Model ── quoi envoyer (Description), où ranger la réponse (2 champs)
+   │
+Extension OpenPages ─────────── connexion sécurisée (IBM Cloud IAM) à l'instance Orchestrate
+   │ POST /v1/orchestrate/{agent_id}/chat/completions
+   ▼
+Agent « Control_Evaluation_Agent » ── tool « simulate_control_test » (bouchon déterministe)
+   │
+   ▼ {"OperatingEffectiveness": "...", "Explanation": "..."}
+OpenPages propose les valeurs → l'auditeur valide
 ```
 
-C'est un **bouchon** : aucune donnée réelle n'est lue. Les résultats de test sont simulés, mais restent crédibles et toujours identiques, ce qui rend la démo reproductible.
+Champs OpenPages utilisés : `OPSS-Ctl:Operating Effectiveness` (Effective / Ineffective / Not Determined)
+et `OPSS-Ctl-Cert:OpEffExplain` (explication).
 
-| Contrôle OpenPages | Résultat de démo | Pourquoi |
-|---|---|---|
-| CTRL-AL-FIN001 (212540) — rapprochement commande/réception/facture | **Ineffective** | 1 paiement à +3,4 % (tolérance ±2 %) sans dérogation |
-| CTRL-AL-TEC001 (212541) — revue des accès / SoD | **Effective** | aucun compte de partant au-delà de 30 jours, conflit SoD couvert par un contrôle compensatoire |
-| Description vague (3ᵉ contrôle, optionnel) | **Not Determined** | impossible d'identifier ce qui est testé |
+## Prérequis
+- Python 3.10+
+- Une instance **watsonx Orchestrate** (URL de service + clé API)
+- **IBM OpenPages** avec droits d'administration (extensions, modèles IA, vues)
+- **IBM Bob** connecté à un serveur MCP OpenPages (scénarios 2 et 3)
 
-## Contenu
-
-```
-agents/Control_Evaluation_Agent.yaml        ← l'agent : prompt + règles de Thomas + format JSON
-tools/simulate_control_test/                ← le bouchon Python qui simule le test
-tests/test_cases.json, tests/run_tests.py   ← 3 cas de test + script qui appelle l'agent comme OpenPages
-ai_insights/wxo-openapi-control-evaluation.yaml  ← spec de l'Extension OpenPages (instance eu-de)
-ai_insights/operating_effectiveness/openpages_config.md  ← paramétrage du bouton AI Insights
-deploy.sh                                   ← déploiement en une commande
-.env                                        ← URL + clé API Orchestrate (ne pas committer)
-```
-
-## Mode d'emploi
-
-### Étape 1 — Installer l'ADK et se connecter à Orchestrate (une seule fois)
+## Installation
 ```bash
-cd control-evaluation
 python3 -m venv .venv && source .venv/bin/activate
 pip install ibm-watsonx-orchestrate requests
-orchestrate env add -n demo-controls \
-  -u https://api.eu-de.watson-orchestrate.cloud.ibm.com/instances/8a1ceb60-ab1e-48b4-86d0-bf012123ebfe \
-  --type ibm_iam --activate
-# → colle la clé API (WXO_API_KEY dans .env) quand elle est demandée
-orchestrate models list      # vérifier que groq/openai/gpt-oss-120b est disponible
+cp .env.sample .env        # puis renseigner WXO_URL et WXO_API_KEY
 ```
-Si `gpt-oss-120b` n'apparaît pas, remplace la ligne `llm:` de l'agent par un modèle marqué ★ dans la liste.
+Puis suivre le README de chaque scénario.
 
-### Étape 2 — Récupérer les infos OpenPages avec Bob (mode OpenPages)
-Colle ce prompt dans Bob :
-> Pour les contrôles 212540 (CTRL-AL-FIN001) et 212541 (CTRL-AL-TEC001), donne-moi la Description complète.
-> Puis lis le schéma openpages://schema/SOXControl et donne-moi le nom technique exact et les valeurs possibles
-> du champ « Operating Effectiveness », ainsi que le champ texte le plus adapté pour stocker une explication.
-
-Ensuite :
-- remplace les descriptions de `tests/test_cases.json` par les vraies descriptions (les miennes reprennent les specs de Thomas) ;
-- vérifie que les valeurs du champ sont bien `Effective` / `Ineffective` / `Not Determined`.
-
-### Étape 3 — Déployer
+## Tests hors ligne
+Sans réseau ni instance : vérifient le bouchon (scénario 1) et le rapprochement RH / ERP (scénario 2).
 ```bash
-./deploy.sh
+pip install -r requirements-dev.txt
+python -m pytest tests
 ```
+Les tests de bout en bout contre l'agent déployé sont dans `scenario-1-bouton-ia/tests/run_tests.py`.
 
-### Étape 4 — Tester
-```bash
-python tests/run_tests.py
-python tests/run_tests.py "Ta description de contrôle libre..."
+## Sécurité
+- `.env` est ignoré par git ; ne jamais committer de clé (utiliser `.env.sample`).
+- Les fichiers de configuration contiennent des **placeholders** (`<region>`, `<instance-id>`,
+  `<AGENT_ID>`, `<RESOURCE_ID>`) à remplacer localement.
+- Le serveur MCP OpenPages permet l'écriture (`openpages_upsert_object`) : les prompts imposent
+  une validation humaine avant toute création ou modification, et la recopie de la Description
+  (sinon elle est effacée).
+
+## Structure
 ```
-Les trois cas doivent afficher `[OK ]`. Le script affiche aussi l'**ID de l'agent**, dont tu as besoin pour OpenPages.
-Tu peux aussi tester dans l'interface Orchestrate (Agents → Control Evaluation Agent → Preview), ou avec
-`orchestrate chat ask --agent-name Control_Evaluation_Agent "<description>"`.
-
-### Étape 5 — Brancher le bouton dans OpenPages
-Suis `ai_insights/operating_effectiveness/openpages_config.md`.
-
-## Pour modifier le comportement
-- **Changer un résultat de démo** : dans `simulate_control_test.py`, en haut de fichier (tolérance, N = 30 jours, période) ou dans `_finance_evidence` / `_it_evidence`. Redéploie ensuite avec `./deploy.sh`.
-- **Forcer un autre résultat** sans toucher au code : ajoute « scénario fail » ou « scénario pass » dans le message envoyé à l'agent.
-- **Changer le ton ou la longueur de l'explication** : modifie la section `instructions` de `agents/Control_Evaluation_Agent.yaml`.
-
-## Points ouverts à valider avec Thomas
-- Faut-il aussi renvoyer la **date du test** ? Elle figure aujourd'hui au début de l'explication.
-- La **longueur max** de l'explication est fixée à 1 200 caractères (l'exemple du deck plafonne à 1 900).
-- Le 3ᵉ contrôle « Not Determined » doit-il être créé dans OpenPages pour la démo ?
+.env.sample                 modèle de configuration
+requirements-dev.txt        dépendances des tests hors ligne
+tests/                      tests hors ligne (pytest)
+scenario-1-bouton-ia/       agent, bouchon, déploiement, config OpenPages, instructions Bob
+scenario-2-rh-erp/          données fictives RH / ERP, script de rapprochement, prompts Bob
+scenario-3-plan-action/     prompt Bob du plan d'action
+```
