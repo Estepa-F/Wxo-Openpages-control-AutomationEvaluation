@@ -1,0 +1,38 @@
+[
+  {
+    "id": "FIN_EN",
+    "openpages_ref": "CTRL-FIN-001",
+    "expected": "Ineffective",
+    "control_description": "Control – Purchase order / goods receipt / invoice three-way matching (procurement). Performed weekly on all invoices received by the Finance manager. The control can be automated and covers all group entities."
+  },
+  {
+    "id": "IT_EN",
+    "openpages_ref": "CTRL-IT-001",
+    "expected": "Effective",
+    "control_description": "IT: ERP user access review and segregation of duties.\nRisk: unauthorised access, SoD conflict (e.g. creating a vendor AND paying it).\nSources: directory and IAM, HR records (leavers, transfers), ERP roles, SoD matrix.\nRole of the AI: match active accounts against leavers, spot SoD conflicts and unjustified privileged accounts, then propose a remediation priority.\nConclusion: ineffective if a leaver's account remains active more than N days after departure, or if a conflict is not covered by a compensating control.\nPerformed monthly by the ERP administrator."
+  },
+  {
+    "id": "VAGUE_EN",
+    "openpages_ref": "Synthetic case",
+    "expected": "Not Determined",
+    "control_description": "Periodic control performed by the relevant team to make sure everything is compliant."
+  },
+  {
+    "id": "SHORT_EN",
+    "openpages_ref": "Existing control with a vague description",
+    "expected": "Not Determined",
+    "control_description": "Auto-scaling capacity thresholds"
+  },
+  {
+    "id": "FIN_FR",
+    "openpages_ref": "CTRL-FIN-001 (French description)",
+    "expected": "Ineffective",
+    "control_description": "Contrôle – Rapprochement commande / réception / facture (achats). Ce contrôle doit être réalisé 1 fois par semaine sur l'ensemble des factures émises par le responsable Finance."
+  },
+  {
+    "id": "IT_FR",
+    "openpages_ref": "CTRL-IT-001 (French description)",
+    "expected": "Effective",
+    "control_description": "IT : Revue des accès et séparation des tâches (ERP). Sources : annuaire et IAM, référentiel RH (départs, mobilités), rôles ERP, matrice de séparation des tâches."
+  }
+]

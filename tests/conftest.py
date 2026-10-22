@@ -1,8 +1,8 @@
 """
-Tests hors ligne : aucun appel réseau, aucune dépendance à watsonx Orchestrate.
+Offline tests: no network call, no dependency on watsonx Orchestrate.
 
-Le décorateur @tool de l'ADK est remplacé par un faux module, pour pouvoir
-importer et tester le bouchon simulate_control_test sans installer l'ADK.
+The ADK @tool decorator is replaced by a fake module so that the
+simulate_control_test stub can be imported and tested without installing the ADK.
 """
 
 import sys
@@ -10,8 +10,6 @@ import types
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
-SCENARIO_1 = REPO / "scenario-1-bouton-ia"
-SCENARIO_2 = REPO / "scenario-2-rh-erp"
 
 
 def _install_fake_adk() -> None:
@@ -19,7 +17,7 @@ def _install_fake_adk() -> None:
         return
     tools = types.ModuleType("ibm_watsonx_orchestrate.agent_builder.tools")
 
-    class ToolPermission:  # noqa: D401 - simple stand-in
+    class ToolPermission:
         READ_ONLY = "read_only"
 
     tools.ToolPermission = ToolPermission
@@ -31,5 +29,5 @@ def _install_fake_adk() -> None:
 
 
 _install_fake_adk()
-sys.path.insert(0, str(SCENARIO_1 / "tools" / "simulate_control_test"))
-sys.path.insert(0, str(SCENARIO_2))
+sys.path.insert(0, str(REPO / "tools"))
+sys.path.insert(0, str(REPO / "scripts"))

@@ -1,0 +1,28 @@
+﻿login;employee_id;full_name;account_status;roles;last_login;created_on
+cmartin;M001;Claire MARTIN;Active;Invoice approval|Vendor inquiry;2026-10-14;2015-03-02
+mbernard;M002;Mathieu BERNARD;Active;Invoice entry;2026-10-14;2019-09-16
+spetit;M003;Sophie PETIT;Active;Vendor payment;2026-10-13;2017-01-09
+jdurand;M004;Jérôme DURAND;Active;PO creation;2026-10-14;2020-05-04
+mleroy;M005;Marc LEROY;Active;PO approval|Vendor creation;2026-10-12;2012-11-19
+cmoreau;M006;Camille MOREAU;Active;PO creation;2026-10-14;2021-02-01
+nsimon;M007;Nicolas SIMON;Active;Invoice entry|Vendor creation|Vendor payment;2026-10-14;2018-06-11
+jlaurent;M008;Julie LAURENT;Active;Reporting inquiry;2026-10-10;2016-04-25
+alefebvre;M009;Antoine LEFEBVRE;Active;ERP Administrator;2026-10-14;2014-10-06
+lmichel;M010;Laura MICHEL;Active;Reporting inquiry|Vendor creation;2026-10-13;2020-01-13
+hgarcia;M011;Hugo GARCIA;Active;Goods receipt;2026-10-14;2022-03-14
+edavid;M012;Emma DAVID;Active;Goods receipt|Goods receipt approval;2026-10-14;2019-07-01
+lbertrand;M013;Lucas BERTRAND;Active;Reporting inquiry;2026-10-09;2023-01-16
+mroux;M014;Manon ROUX;Active;HR inquiry;2026-10-14;2018-02-05
+pvincent;M015;Paul VINCENT;Active;ERP support;2026-10-14;2021-09-20
+cfournier;M016;Chloé FOURNIER;Active;PO creation;2026-10-11;2024-04-02
+lmorel;M017;Louis MOREL;Active;Reporting inquiry|Payment approval;2026-10-08;2010-05-17
+lgirard;M018;Léa GIRARD;Active;Inventory management;2026-10-14;2022-10-10
+mandre;M019;Maxime ANDRE;Active;Journal entry;2026-10-14;2020-11-23
+smercier;M020;Sarah MERCIER;Active;ERP Administrator;2026-10-02;2016-08-29
+pblanc;M021;Pierre BLANC;Active;Invoice entry|Vendor payment;2026-09-29;2016-03-07
+aguerin;M022;Alice GUERIN;Active;PO creation|Vendor creation;2026-06-28;2019-05-13
+rboyer;M023;Romain BOYER;Active;Goods receipt;2026-10-02;2021-06-01
+igarnier;M024;Inès GARNIER;Disabled;Vendor payment;2026-06-27;2018-09-03
+achevalier;M025;Arthur CHEVALIER;Disabled;PO creation;2026-09-11;2022-01-10
+svc_test_admin;;Technical test account;Active;ERP Administrator;2026-10-01;2025-11-03
+ext.dupuis;X999;Marc DUPUIS (contractor);Active;Invoice entry|Vendor creation;2026-10-07;2026-03-16

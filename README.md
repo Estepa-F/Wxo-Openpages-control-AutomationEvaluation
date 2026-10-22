@@ -1,76 +1,181 @@
-# watsonx Orchestrate × IBM OpenPages — évaluation automatisée des contrôles
+<h1 align="center">watsonx Orchestrate × OpenPages — AI Control Evaluation</h1>
+<p align="center">
+<strong>An agentic AI demo for Governance, Risk &amp; Compliance.<br>
+  One click on a control. A justified verdict. The auditor stays in charge.</strong>
+</p>
+<!-- BADGES -->
+<p align="center">
+<img src="https://img.shields.io/badge/version-1.0.0-blue.svg" alt="Version">
+<img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License">
+<img src="https://img.shields.io/badge/python-3.12+-blue.svg" alt="Python">
+<img src="https://img.shields.io/badge/IBM-watsonx_Orchestrate-052FAD.svg?logo=ibm&logoColor=white" alt="IBM watsonx Orchestrate">
+<img src="https://img.shields.io/badge/IBM-OpenPages-052FAD.svg?logo=ibm&logoColor=white" alt="IBM OpenPages">
+<img src="https://img.shields.io/badge/IBM-Bob-052FAD.svg?logo=ibm&logoColor=white" alt="IBM Bob">
+</p>
+<!-- CTA -->
+<p align="center">
+  <a href="https://www.linkedin.com/in/estepa/">
+<img src="https://img.shields.io/badge/💬_Discuss_on_LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="Discuss on LinkedIn" height="50">
+</a>
+</p>
 
-Démonstrateur GRC : un agent IA **watsonx Orchestrate** évalue l'**efficacité opérationnelle**
-(*Operating Effectiveness*) des contrôles internes **IBM OpenPages**, et **IBM Bob** pilote
-OpenPages via son serveur MCP pour analyser des données et ouvrir des plans d'action.
+A watsonx Orchestrate demo project that evaluates the **operating effectiveness** of internal
+controls stored in IBM OpenPages.
 
-> Les données, contrôles et résultats de test sont **fictifs** (démo reproductible).
-> Aucune donnée client, aucun identifiant d'instance ni aucune clé n'est versionné.
+The project brings together:
+- **IBM OpenPages** as the GRC system (controls, issues, action plans)
+- **IBM watsonx Orchestrate** for the control evaluation agent
+- **IBM Bob** with the OpenPages MCP server, to build the solution and run audit analyses
 
-## Les 3 scénarios
+## 🎯 The problem
 
-| Scénario | Ce qu'il montre | Déclencheur | Dossier |
-|---|---|---|---|
-| **1. Bouton IA sur le contrôle** | Un clic sur la fiche OpenPages appelle l'agent Orchestrate, qui propose `Effective` / `Ineffective` / `Not Determined` + une explication | Bouton *AI Insights* dans OpenPages | [`scenario-1-bouton-ia/`](scenario-1-bouton-ia/) |
-| **2. Rapprochement RH / ERP** | Bob compare deux extractions (RH et comptes ERP), détecte les écarts et passe le contrôle à `Ineffective` | Prompt dans IBM Bob | [`scenario-2-rh-erp/`](scenario-2-rh-erp/) |
-| **3. Plan d'action 2ᵉ → 1ʳᵉ ligne** | Contradiction entre l'auto-évaluation et le test IA → Bob crée une Issue et deux actions assignées au propriétaire du contrôle | Prompt dans IBM Bob | [`scenario-3-plan-action/`](scenario-3-plan-action/) |
+Testing the operating effectiveness of controls is slow and repetitive:
 
-## Architecture (scénario 1)
+- 📄 the auditor reads the control description and gathers evidence from several systems (ERP, IAM, HR)
+- 🔍 runs the test (three-way match, access review, segregation of duties...)
+- ✍️ writes a conclusion and a justification by hand in OpenPages
+- 🔁 and repeats it for every control, every campaign
+
+The result: hours per control, uneven justifications, and contradictions between first-line
+self-assessments and second-line reviews that are spotted late.
+
+## 💡 The solution
+
+An **AI insights action** directly on the OpenPages control:
+
+- **One click** under the control description calls a watsonx Orchestrate agent
+- The agent runs a **test tool** and returns a status — `Effective`, `Ineffective` or
+  `Not Determined` — with an **evidence-based explanation**
+- The **verdict is computed in code**, not improvised by the LLM, so it is reproducible
+- The auditor **reviews and applies** the suggestion: the human stays in the loop
+
+Two more scenarios with **IBM Bob** and the OpenPages MCP server: an HR / ERP access
+reconciliation that updates the control, and a second-line action plan assigned to the first line.
+
+> The test tool is a **stub** that returns realistic simulated results. Replace it with real
+> data sources without changing the agent or OpenPages.
+
+## 🏗️ Architecture
 
 ```
-Fiche du contrôle (OpenPages)
-   │ clic « Évaluer l'efficacité opérationnelle (IA) »
-   ▼
-Custom Machine Learning Model ── quoi envoyer (Description), où ranger la réponse (2 champs)
-   │
-Extension OpenPages ─────────── connexion sécurisée (IBM Cloud IAM) à l'instance Orchestrate
-   │ POST /v1/orchestrate/{agent_id}/chat/completions
-   ▼
-Agent « Control_Evaluation_Agent » ── tool « simulate_control_test » (bouchon déterministe)
-   │
-   ▼ {"OperatingEffectiveness": "...", "Explanation": "..."}
-OpenPages propose les valeurs → l'auditeur valide
+            ┌──────────────────── IBM OpenPages ────────────────────┐
+            │  Control ── Description ──▶ [Evaluate (AI)] button    │
+            │                                │          ▲           │
+            │              Custom ML Model + Extension  │ Set fields│
+            └────────────────────────────────┼──────────┼───────────┘
+                                             ▼          │ {"OperatingEffectiveness", "Explanation"}
+            ┌──────────────── watsonx Orchestrate ───────────────────┐
+            │  Control_Evaluation_Agent ──▶ simulate_control_test    │
+            └────────────────────────────────────────────────────────┘
+
+            ┌──────── IBM Bob ────────┐        ┌──── OpenPages MCP ────┐
+            │ build · deploy · test   │ ─────▶ │ read / upsert objects │
+            │ HR/ERP reconciliation   │        │ (human approval)      │
+            └─────────────────────────┘        └───────────────────────┘
 ```
 
-Champs OpenPages utilisés : `OPSS-Ctl:Operating Effectiveness` (Effective / Ineffective / Not Determined)
-et `OPSS-Ctl-Cert:OpEffExplain` (explication).
+Details: [`docs/architecture.md`](docs/architecture.md).
 
-## Prérequis
-- Python 3.10+
-- Une instance **watsonx Orchestrate** (URL de service + clé API)
-- **IBM OpenPages** avec droits d'administration (extensions, modèles IA, vues)
-- **IBM Bob** connecté à un serveur MCP OpenPages (scénarios 2 et 3)
+## Project structure
 
-## Installation
+- [`agents/`](agents/): Orchestrate agent definition
+- [`tools/`](tools/): Python test tool called by the agent
+- [`scripts/`](scripts/): setup, deployment, end-to-end test and HR / ERP reconciliation scripts
+- [`openpages/`](openpages/): OpenAPI spec for the OpenPages Extension
+- [`bob/`](bob/): instructions and prompts for IBM Bob
+- [`data/`](data/): fictional HR and ERP extracts
+- [`tests/`](tests/): offline unit tests and end-to-end test cases
+- [`docs/`](docs/): guides
+
+## Quick start
+
+### 1. Prepare the environment
+
 ```bash
 python3 -m venv .venv && source .venv/bin/activate
-pip install ibm-watsonx-orchestrate requests
-cp .env.sample .env        # puis renseigner WXO_URL et WXO_API_KEY
+pip install ibm-watsonx-orchestrate -r requirements-dev.txt
+cp .env.sdk.exemple .env.sdk      # then edit it
 ```
-Puis suivre le README de chaque scénario.
 
-## Tests hors ligne
-Sans réseau ni instance : vérifient le bouchon (scénario 1) et le rapprochement RH / ERP (scénario 2).
+### Variables to edit in [`.env.sdk.exemple`](.env.sdk.exemple)
+
+Whoever installs the project creates their own local `.env.sdk` file and replaces the
+example values with their own information.
+
+#### watsonx Orchestrate
+- `WO_INSTANCE_ALIAS`: local alias of the watsonx Orchestrate environment
+- `WO_INSTANCE`: watsonx Orchestrate instance URL
+- `WO_API_KEY`: watsonx Orchestrate API key
+
+#### OpenPages MCP (optional, for Bob)
+- `OPENPAGES_MCP_URL`: URL of the OpenPages MCP server
+
+### 2. Deploy the project
+
 ```bash
-pip install -r requirements-dev.txt
-python -m pytest tests
+./scripts/configure_environment.sh
+./scripts/deploy_complete.sh
 ```
-Les tests de bout en bout contre l'agent déployé sont dans `scenario-1-bouton-ia/tests/run_tests.py`.
 
-## Sécurité
-- `.env` est ignoré par git ; ne jamais committer de clé (utiliser `.env.sample`).
-- Les fichiers de configuration contiennent des **placeholders** (`<region>`, `<instance-id>`,
-  `<AGENT_ID>`, `<RESOURCE_ID>`) à remplacer localement.
-- Le serveur MCP OpenPages permet l'écriture (`openpages_upsert_object`) : les prompts imposent
-  une validation humaine avant toute création ou modification, et la recopie de la Description
-  (sinon elle est effacée).
+### 3. Test
 
-## Structure
+```bash
+python3 -m pytest -q tests                 # offline
+python scripts/test_agent.py --repeat 5    # deployed agent, prints its ID
 ```
-.env.sample                 modèle de configuration
-requirements-dev.txt        dépendances des tests hors ligne
-tests/                      tests hors ligne (pytest)
-scenario-1-bouton-ia/       agent, bouchon, déploiement, config OpenPages, instructions Bob
-scenario-2-rh-erp/          données fictives RH / ERP, script de rapprochement, prompts Bob
-scenario-3-plan-action/     prompt Bob du plan d'action
+
+### 4. Connect OpenPages
+
+Create the Extension, the Custom Machine Learning Model and attach it to the control view:
+[`docs/openpages-integration.md`](docs/openpages-integration.md).
+
+## Documentation
+
+### Per-folder documentation
+
+- [`agents/README.md`](agents/README.md)
+- [`tools/README.md`](tools/README.md)
+- [`scripts/README.md`](scripts/README.md)
+- [`openpages/README.md`](openpages/README.md)
+- [`bob/README.md`](bob/README.md)
+- [`data/README.md`](data/README.md)
+
+### Detailed guides in [`docs/`](docs/)
+
+- [`docs/installation.md`](docs/installation.md) — installation and deployment guide
+- [`docs/architecture.md`](docs/architecture.md) — architecture and data flow
+- [`docs/openpages-integration.md`](docs/openpages-integration.md) — Extension, Custom ML Model and view configuration
+- [`docs/patterns.md`](docs/patterns.md) — design patterns used in the project
+- [`docs/scenario-demo.md`](docs/scenario-demo.md) — full demo scenario (3 scenarios)
+- [`docs/expected-hr-erp-result.md`](docs/expected-hr-erp-result.md) — expected HR / ERP reconciliation output
+
+## 🎥 External resources
+
+- 💼 [LinkedIn profile](https://www.linkedin.com/in/estepa/)
+
+## ⚖️ License
+
+This project is distributed under the MIT license. See [LICENSE](LICENSE) for details.
+
 ```
+MIT License
+Copyright (c) 2026 François Estepa
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction [...]
+```
+
+## 🙏 Credits
+
+Built with:
+- [IBM watsonx Orchestrate](https://www.ibm.com/products/watsonx-orchestrate) and its [ADK](https://developer.watson-orchestrate.ibm.com/)
+- [IBM OpenPages](https://www.ibm.com/products/openpages)
+- IBM Bob and the OpenPages MCP server
+
+---
+
+<p align="center">
+  ⭐ If this project inspired you, give the repo a star. It helps other architects find it.<br>
+  💬 Questions? Open an issue or reach out on <a href="https://www.linkedin.com/in/estepa/">LinkedIn</a>.
+</p>

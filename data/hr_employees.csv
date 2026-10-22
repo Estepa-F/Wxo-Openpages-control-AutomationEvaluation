@@ -1,0 +1,26 @@
+﻿employee_id;last_name;first_name;department;job_title;status;hire_date;leave_date;transfer_date;comment
+M001;MARTIN;Claire;Finance;Accounts Payable Manager;Active;2015-03-02;;;
+M002;BERNARD;Mathieu;Finance;Accounts Payable Clerk;Active;2019-09-16;;;
+M003;PETIT;Sophie;Finance;Treasurer;Active;2017-01-09;;;
+M004;DURAND;Jérôme;Procurement;Buyer;Active;2020-05-04;;;
+M005;LEROY;Marc;Procurement;Procurement Manager;Active;2012-11-19;;;
+M006;MOREAU;Camille;Procurement;Buyer;Active;2021-02-01;;;
+M007;SIMON;Nicolas;Finance;Accounts Payable Clerk;Active;2018-06-11;;;
+M008;LAURENT;Julie;Management Control;Management Controller;Active;2016-04-25;;;
+M009;LEFEBVRE;Antoine;IT;ERP Administrator;Active;2014-10-06;;;
+M010;MICHEL;Laura;Marketing;Product Manager;Transfer;2020-01-13;;2026-09-01;Transfer Procurement → Marketing
+M011;GARCIA;Hugo;Logistics;Warehouse Operator;Active;2022-03-14;;;
+M012;DAVID;Emma;Logistics;Goods Receipt Manager;Active;2019-07-01;;;
+M013;BERTRAND;Lucas;Finance;Internal Controller;Active;2023-01-16;;;
+M014;ROUX;Manon;HR;Payroll Officer;Active;2018-02-05;;;
+M015;VINCENT;Paul;IT;Support Engineer;Active;2021-09-20;;;
+M016;FOURNIER;Chloé;Procurement;Procurement Assistant;Active;2024-04-02;;;
+M017;MOREL;Louis;Finance;Chief Financial Officer;Active;2010-05-17;;;
+M018;GIRARD;Léa;Logistics;Inventory Manager;Active;2022-10-10;;;
+M019;ANDRE;Maxime;Finance;General Accountant;Active;2020-11-23;;;
+M020;MERCIER;Sarah;IT;IT Security Manager;Active;2016-08-29;;;
+M021;BLANC;Pierre;Finance;Accounts Payable Clerk;Left;2016-03-07;2026-08-14;;Resignation
+M022;GUERIN;Alice;Procurement;Buyer;Left;2019-05-13;2026-07-02;;End of contract
+M023;BOYER;Romain;Logistics;Warehouse Operator;Left;2021-06-01;2026-10-03;;Resignation
+M024;GARNIER;Inès;Finance;Deputy Treasurer;Left;2018-09-03;2026-06-30;;Retirement
+M025;CHEVALIER;Arthur;Procurement;Buyer;Left;2022-01-10;2026-09-12;;Mutual termination
