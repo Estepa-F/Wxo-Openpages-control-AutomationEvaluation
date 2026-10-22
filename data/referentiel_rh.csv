@@ -1,0 +1,26 @@
+﻿matricule;nom;prenom;direction;poste;statut;date_entree;date_sortie;date_mobilite;commentaire
+M001;MARTIN;Claire;Finance;Responsable comptabilité fournisseurs;Actif;2015-03-02;;;
+M002;BERNARD;Thomas;Finance;Comptable fournisseurs;Actif;2019-09-16;;;
+M003;PETIT;Sophie;Finance;Trésorière;Actif;2017-01-09;;;
+M004;DURAND;Julien;Achats;Acheteur;Actif;2020-05-04;;;
+M005;LEROY;Marc;Achats;Responsable achats;Actif;2012-11-19;;;
+M006;MOREAU;Camille;Achats;Acheteuse;Actif;2021-02-01;;;
+M007;SIMON;Nicolas;Finance;Comptable fournisseurs;Actif;2018-06-11;;;
+M008;LAURENT;Julie;Contrôle de gestion;Contrôleuse de gestion;Actif;2016-04-25;;;
+M009;LEFEBVRE;Antoine;DSI;Administrateur ERP;Actif;2014-10-06;;;
+M010;MICHEL;Laura;Marketing;Chef de produit;Mobilité;2020-01-13;;2026-09-01;Mobilité Achats → Marketing
+M011;GARCIA;Hugo;Logistique;Magasinier;Actif;2022-03-14;;;
+M012;DAVID;Emma;Logistique;Responsable réception;Actif;2019-07-01;;;
+M013;BERTRAND;Lucas;Finance;Contrôleur interne;Actif;2023-01-16;;;
+M014;ROUX;Manon;RH;Gestionnaire paie;Actif;2018-02-05;;;
+M015;VINCENT;Paul;DSI;Ingénieur support;Actif;2021-09-20;;;
+M016;FOURNIER;Chloé;Achats;Assistante achats;Actif;2024-04-02;;;
+M017;MOREL;Louis;Finance;Directeur financier;Actif;2010-05-17;;;
+M018;GIRARD;Léa;Logistique;Gestionnaire de stock;Actif;2022-10-10;;;
+M019;ANDRE;Maxime;Finance;Comptable général;Actif;2020-11-23;;;
+M020;MERCIER;Sarah;DSI;Responsable sécurité SI;Actif;2016-08-29;;;
+M021;BLANC;Pierre;Finance;Comptable fournisseurs;Parti;2016-03-07;2026-08-14;;Démission
+M022;GUERIN;Alice;Achats;Acheteuse;Parti;2019-05-13;2026-07-02;;Fin de contrat
+M023;BOYER;Romain;Logistique;Magasinier;Parti;2021-06-01;2026-10-03;;Démission
+M024;GARNIER;Inès;Finance;Trésorière adjointe;Parti;2018-09-03;2026-06-30;;Retraite
+M025;CHEVALIER;Arthur;Achats;Acheteur;Parti;2022-01-10;2026-09-12;;Rupture conventionnelle

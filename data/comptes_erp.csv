@@ -1,0 +1,28 @@
+﻿login;matricule;nom_complet;statut_compte;roles;derniere_connexion;date_creation
+cmartin;M001;Claire MARTIN;Actif;Validation factures|Consultation fournisseurs;2026-10-14;2015-03-02
+tbernard;M002;Thomas BERNARD;Actif;Saisie factures;2026-10-14;2019-09-16
+spetit;M003;Sophie PETIT;Actif;Paiement fournisseurs;2026-10-13;2017-01-09
+jdurand;M004;Julien DURAND;Actif;Création commande;2026-10-14;2020-05-04
+mleroy;M005;Marc LEROY;Actif;Validation commande|Création fournisseur;2026-10-12;2012-11-19
+cmoreau;M006;Camille MOREAU;Actif;Création commande;2026-10-14;2021-02-01
+nsimon;M007;Nicolas SIMON;Actif;Saisie factures|Création fournisseur|Paiement fournisseurs;2026-10-14;2018-06-11
+jlaurent;M008;Julie LAURENT;Actif;Consultation reporting;2026-10-10;2016-04-25
+alefebvre;M009;Antoine LEFEBVRE;Actif;Administrateur ERP;2026-10-14;2014-10-06
+lmichel;M010;Laura MICHEL;Actif;Consultation reporting|Création fournisseur;2026-10-13;2020-01-13
+hgarcia;M011;Hugo GARCIA;Actif;Réception marchandises;2026-10-14;2022-03-14
+edavid;M012;Emma DAVID;Actif;Réception marchandises|Validation réception;2026-10-14;2019-07-01
+lbertrand;M013;Lucas BERTRAND;Actif;Consultation reporting;2026-10-09;2023-01-16
+mroux;M014;Manon ROUX;Actif;Consultation RH;2026-10-14;2018-02-05
+pvincent;M015;Paul VINCENT;Actif;Support ERP;2026-10-14;2021-09-20
+cfournier;M016;Chloé FOURNIER;Actif;Création commande;2026-10-11;2024-04-02
+lmorel;M017;Louis MOREL;Actif;Consultation reporting|Validation paiements;2026-10-08;2010-05-17
+lgirard;M018;Léa GIRARD;Actif;Gestion stocks;2026-10-14;2022-10-10
+mandre;M019;Maxime ANDRE;Actif;Saisie écritures;2026-10-14;2020-11-23
+smercier;M020;Sarah MERCIER;Actif;Administrateur ERP;2026-10-02;2016-08-29
+pblanc;M021;Pierre BLANC;Actif;Saisie factures|Paiement fournisseurs;2026-09-29;2016-03-07
+aguerin;M022;Alice GUERIN;Actif;Création commande|Création fournisseur;2026-06-28;2019-05-13
+rboyer;M023;Romain BOYER;Actif;Réception marchandises;2026-10-02;2021-06-01
+igarnier;M024;Inès GARNIER;Désactivé;Paiement fournisseurs;2026-06-27;2018-09-03
+achevalier;M025;Arthur CHEVALIER;Désactivé;Création commande;2026-09-11;2022-01-10
+svc_test_admin;;Compte technique test;Actif;Administrateur ERP;2026-10-01;2025-11-03
+ext.dupuis;X999;Marc DUPUIS (prestataire);Actif;Saisie factures|Création fournisseur;2026-10-07;2026-03-16

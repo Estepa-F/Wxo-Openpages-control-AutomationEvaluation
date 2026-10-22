@@ -1,0 +1,26 @@
+[
+  {
+    "id": "FIN",
+    "openpages_ref": "CTRL-AL-FIN001 (Resource ID 212540)",
+    "expected": "Ineffective",
+    "control_description": "Controle – Rapprochement commande / réception / facture (achats). Ce controle doit être réalisé 1 fois par semaine sur l'ensemble des factures émises. C'est le responsable Finance qui opère ce controle. Et ce contrôle peut être automatisé. Cela couvre l'ensemble des entités du groupe."
+  },
+  {
+    "id": "TEC",
+    "openpages_ref": "CTRL-AL-TEC001 (Resource ID 212541)",
+    "expected": "Effective",
+    "control_description": "IT: Revue des accès et séparation des tâches (ERP)\nAccès non autorisé, conflit de tâches (par exemple créer un fournisseur ET le payer).\nSources SI : annuaire et IAM, référentiel RH (départs, mobilités), rôles ERP, matrice de séparation des tâches.\nRôle de l'IA : croiser les comptes actifs avec les départs, repérer les conflits de tâches et les comptes à privilèges sans motif, puis proposer une priorité de remédiation.\nEn Conclusion : inefficace s'il reste un compte de personne partie plus de N jours après son départ, ou un conflit non couvert par un contrôle compensatoire.\nCe controle doit être réalilsé par l'administrateur ERP une fois par mois"
+  },
+  {
+    "id": "AUTOSCALE",
+    "openpages_ref": "RSK_01068_CON_00005037 (Resource ID 211592)",
+    "expected": "Not Determined",
+    "control_description": "Auto-scaling capacity thresholds"
+  },
+  {
+    "id": "VAGUE",
+    "openpages_ref": "Cas synthétique",
+    "expected": "Not Determined",
+    "control_description": "Contrôle périodique réalisé par l'équipe concernée pour s'assurer que tout est conforme."
+  }
+]
