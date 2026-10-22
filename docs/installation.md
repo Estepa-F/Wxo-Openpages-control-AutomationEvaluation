@@ -10,8 +10,8 @@
 ## 1. Clone and create the virtual environment
 
 ```bash
-git clone https://github.com/Estepa-F/wxo-openpages-control-automationevaluation.git
-cd wxo-openpages-control-automationevaluation
+git clone https://github.com/Estepa-F/Wxo-Openpages-control-AutomationEvaluation.git
+cd Wxo-Openpages-control-AutomationEvaluation
 python3 -m venv .venv
 source .venv/bin/activate
 pip install ibm-watsonx-orchestrate
