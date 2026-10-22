@@ -11,13 +11,13 @@ info:
     url: https://cloud.ibm.com/unifiedsupport/supportcenter
 
 servers:
-  - url: https://api.eu-de.watson-orchestrate.cloud.ibm.com/instances/8a1ceb60-ab1e-48b4-86d0-bf012123ebfe
-    description: watsonx Orchestrate API server (EU-DE - instance démo Control Evaluation)
+  - url: https://api.<region>.watson-orchestrate.cloud.ibm.com/instances/<instance-id>
+    description: watsonx Orchestrate API server (instance watsonx Orchestrate)
   - url: https://{instance_endpoint}
     description: Custom watsonx Orchestrate instance endpoint
     variables:
       instance_endpoint:
-        default: api.eu-de.watson-orchestrate.cloud.ibm.com/instances/8a1ceb60-ab1e-48b4-86d0-bf012123ebfe
+        default: api.<region>.watson-orchestrate.cloud.ibm.com/instances/<instance-id>
         description: The instance endpoint for your watsonx Orchestrate deployment
 
 security:
@@ -136,7 +136,7 @@ paths:
           schema:
             type: string
             description: Agent ID
-            default: "660e8cb4-eb2a-4dac-b56f-df5ca63ac46c"
+            default: "<AGENT_ID>"
         - name: X-IBM-THREAD-ID
           in: header
           required: false

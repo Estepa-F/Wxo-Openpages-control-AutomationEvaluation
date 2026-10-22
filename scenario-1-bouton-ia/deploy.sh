@@ -6,7 +6,7 @@
 #   orchestrate env add -n demo-controls -u "$WXO_URL" --type ibm_iam --activate
 #   (la commande demande la clé API : colle WXO_API_KEY du fichier .env)
 #
-# Usage : ./deploy.sh   (depuis la racine du projet)
+# Usage : ./deploy.sh   (depuis n'importe où ; le script se place dans son dossier)
 
 set -euo pipefail
 cd "$(dirname "$0")"

@@ -2,12 +2,12 @@
 Teste l'agent Control_Evaluation_Agent déployé dans watsonx Orchestrate,
 exactement comme OpenPages l'appellera (POST /v1/orchestrate/{agent_id}/chat/completions).
 
-Usage (depuis la racine du projet) :
+Usage (depuis le dossier scenario-1-bouton-ia) :
     python tests/run_tests.py              # tous les cas de tests/test_cases.json
     python tests/run_tests.py --repeat 3   # chaque cas 3 fois (stabilité)
     python tests/run_tests.py "Ma description de contrôle..."   # un cas libre
 
-Lit WXO_URL et WXO_API_KEY dans le fichier .env.
+Lit WXO_URL et WXO_API_KEY dans le fichier .env (racine du repo).
 """
 
 import json
@@ -24,9 +24,11 @@ TEST_PERIOD_MARK = "01/09/2026"  # début de TEST_PERIOD dans simulate_control_t
 
 
 def load_env() -> None:
-    env_file = ROOT / ".env"
-    if not env_file.exists():
-        sys.exit("Fichier .env introuvable à la racine du projet.")
+    # .env à la racine du repo (recommandé) ou dans le dossier du scénario
+    candidates = [ROOT.parent / ".env", ROOT / ".env"]
+    env_file = next((c for c in candidates if c.exists()), None)
+    if env_file is None:
+        sys.exit("Fichier .env introuvable : copier .env.sample en .env à la racine du repo et le remplir.")
     for line in env_file.read_text().splitlines():
         line = line.strip()
         if line and not line.startswith("#") and "=" in line:

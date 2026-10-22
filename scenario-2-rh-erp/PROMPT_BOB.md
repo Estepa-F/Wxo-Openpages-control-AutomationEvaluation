@@ -1,13 +1,14 @@
 # Prompts Bob — démo « Rapprochement RH / ERP »
 
-Contrôle de démo : **CTRL-AL-TEC002** (Resource ID **213037**), créé par Thomas.
+Contrôle de démo : **CTRL-IT-002** — remplacer `<RESOURCE_ID>` par son Resource ID OpenPages
+(et le nom du contrôle s'il diffère dans votre instance).
 
 ---
 
 ## Prompt 1 — LA DÉMO (à coller dans Bob)
 
 ```
-Tu es un auditeur IT. Effectue la revue des accès ERP du contrôle « CTRL-AL-TEC002 ».
+Tu es un auditeur IT. Effectue la revue des accès ERP du contrôle « CTRL-IT-002 ».
 
 Étape 1 – Données
 Les deux extractions sont dans le dossier data/ :
@@ -20,9 +21,9 @@ Exécute : python3 compare_users.py
 Affiche le tableau des écarts tel quel, puis résume en 3 points les écarts les plus graves.
 
 Étape 3 – Mise à jour du contrôle dans OpenPages (serveur openpages-mcp-server)
-a) Retrouve le contrôle « CTRL-AL-TEC002 » (type SOXControl, Resource ID 213037) : Name et Description actuels.
+a) Retrouve le contrôle « CTRL-IT-002 » (type SOXControl, Resource ID <RESOURCE_ID>) : Name et Description actuels.
 b) Mets-le à jour avec openpages_upsert_object :
-   - object_type = control, id = 213037, name = son Name actuel
+   - object_type = control, id = <RESOURCE_ID>, name = son Name actuel
    - description = la Description actuelle, recopiée À L'IDENTIQUE (sinon elle est effacée)
    - fields :
        "OPSS-Ctl:Operating Effectiveness" = la conclusion du script (Ineffective)
@@ -35,7 +36,7 @@ c) Relis le contrôle et confirme les deux valeurs enregistrées, avec le lien O
 ## Prompt 2 — REMISE À ZÉRO avant la démo
 
 ```
-Remets le contrôle « CTRL-AL-TEC002 » à zéro dans OpenPages avec openpages_upsert_object :
+Remets le contrôle « CTRL-IT-002 » à zéro dans OpenPages avec openpages_upsert_object :
 retrouve d'abord son Resource ID, son Name et sa Description, puis mets
 "OPSS-Ctl:Operating Effectiveness" = "Not Determined" et "OPSS-Ctl-Cert:OpEffExplain" = "".
 Recopie la Description actuelle à l'identique dans le paramètre description.

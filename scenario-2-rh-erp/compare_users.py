@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Rapprochement des comptes ERP avec le référentiel RH (démo Air Liquide).
+Rapprochement des comptes ERP avec le référentiel RH (démo GRC).
 
 Usage :
     python3 compare_users.py                      # date de revue par défaut : 2026-10-15
@@ -14,7 +14,7 @@ Lit data/referentiel_rh.csv et data/comptes_erp.csv (séparateur ;) et détecte 
   4. comptes à privilèges sans justification par le poste RH
   5. droits sensibles incompatibles avec la direction actuelle (mobilités non revues)
 
-Conclusion (règle de Thomas) : Ineffective s'il reste un compte de personne partie
+Conclusion (règle métier) : Ineffective s'il reste un compte de personne partie
 plus de N jours après son départ, ou un conflit SoD non couvert par un contrôle
 compensatoire. Sinon Effective.
 
@@ -90,8 +90,9 @@ def analyse(review_date: date) -> dict:
             continue
 
         # 1. Personne partie avec compte actif
-        if person["statut"] == "Parti" and active:
-            leave = to_date(person["date_sortie"])
+        leave = to_date(person["date_sortie"])
+        # Un départ postérieur à la date de revue n'est pas encore effectif
+        if person["statut"] == "Parti" and active and leave and leave <= review_date:
             days = (review_date - leave).days
             last = to_date(acc["derniere_connexion"])
             used_after = last and last > leave

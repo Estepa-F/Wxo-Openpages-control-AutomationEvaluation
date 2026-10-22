@@ -26,7 +26,7 @@ import unicodedata
 
 from ibm_watsonx_orchestrate.agent_builder.tools import ToolPermission, tool
 
-# ── Paramètres métier (specs de Thomas) ──────────────────────────────────────
+# ── Paramètres métier (spécifications fonctionnelles) ──────────────────────────────────────
 TOLERANCE_PCT = 2.0          # Finance : tolérance d'écart facture / commande
 LEAVER_MAX_DAYS = 30         # IT : N jours max entre départ et désactivation
 TEST_PERIOD = "01/09/2026 - 30/09/2026"

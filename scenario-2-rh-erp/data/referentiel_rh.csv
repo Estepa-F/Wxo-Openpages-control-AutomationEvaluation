@@ -1,8 +1,8 @@
 ﻿matricule;nom;prenom;direction;poste;statut;date_entree;date_sortie;date_mobilite;commentaire
 M001;MARTIN;Claire;Finance;Responsable comptabilité fournisseurs;Actif;2015-03-02;;;
-M002;BERNARD;Thomas;Finance;Comptable fournisseurs;Actif;2019-09-16;;;
+M002;BERNARD;Mathieu;Finance;Comptable fournisseurs;Actif;2019-09-16;;;
 M003;PETIT;Sophie;Finance;Trésorière;Actif;2017-01-09;;;
-M004;DURAND;Julien;Achats;Acheteur;Actif;2020-05-04;;;
+M004;DURAND;Jérôme;Achats;Acheteur;Actif;2020-05-04;;;
 M005;LEROY;Marc;Achats;Responsable achats;Actif;2012-11-19;;;
 M006;MOREAU;Camille;Achats;Acheteuse;Actif;2021-02-01;;;
 M007;SIMON;Nicolas;Finance;Comptable fournisseurs;Actif;2018-06-11;;;

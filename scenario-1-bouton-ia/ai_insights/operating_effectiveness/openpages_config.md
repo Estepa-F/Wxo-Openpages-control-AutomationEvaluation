@@ -1,13 +1,13 @@
 # Branchement dans OpenPages (bouton AI Insights sur un Control)
 
-Référence : PowerPoint de Thomas (slides 10 à 12) et repo de Julien.
-Fais-toi montrer l'écran une première fois par Julien : il l'a déjà fait.
+Référence : documentation IBM OpenPages (Extensions, Custom Machine Learning Models) et
+[ibm-openpages-generating-doc](https://github.com/jpradier/ibm-openpages-generating-doc).
 
 ## 1. Extension (Administration → Integrations → Extensions)
 - Nouvelle extension, importer `ai_insights/wxo-openapi-control-evaluation.yaml`
-  (déjà pointée sur l'instance eu-de `8a1ceb60-…`).
+  (remplacer `<region>` et `<instance-id>` par ceux de votre instance).
 - Authentification : IBM Cloud IAM, avec la clé API `WXO_API_KEY` du `.env`.
-- Dans le YAML, remplacer `<AGENT_ID_A_REMPLACER>` par l'ID de l'agent
+- Dans le YAML, remplacer `<AGENT_ID>` par l'ID de l'agent
   (affiché en tête de `python tests/run_tests.py`), ou le saisir dans le mapping ci-dessous.
 
 ## 2. Custom Machine Learning Model
@@ -36,7 +36,7 @@ Champ d'explication : `OpEffExplain` est un STRING_TYPE, dont la longueur maxima
 (l'agent produit jusqu'à 1 200 caractères). S'il est trop court, utiliser
 `OPSS-FCM-cert:Operating Effectiveness Description` (LARGE_STRING_TYPE, sans limite).
 
-ID de l'agent (déjà renseigné dans la spec) : `660e8cb4-eb2a-4dac-b56f-df5ca63ac46c`
+ID de l'agent (à renseigner dans la spec ; affiché par `python tests/run_tests.py`) : `<AGENT_ID>`
 
 `$eval` transforme le texte JSON renvoyé par l'agent en objet.
 **À tester en premier** : si OpenPages refuse `$eval`, renvoyer d'abord
